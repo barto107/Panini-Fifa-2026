@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Album Panini - Coupe du Monde 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #032b43;
+        }
+        .search-container {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin-left: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .album-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .page-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .page-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .page-card img:hover {
+            opacity: 0.9;
+        }
+        .page-card p {
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0 0 0;
+        }
+
+        /* Overlay plein écran */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: default;
+        }
+        .fullscreen-overlay img {
+            max-width: 95vw;
+            max-height: 95vh;
+            object-fit: contain;
+            transition: transform 0.1s ease-out;
+            transform-origin: center center;
+            cursor: grab;
+        }
+        .fullscreen-overlay img:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mon Album Panini - Coupe du Monde 2026</h1>
+    
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Rechercher une équipe..." onkeyup="filterPages()">
+        <button onclick="resetSearch()">Réinitialiser</button>
+    </div>
+
+    <div class="album-grid" id="albumGrid">
+        <div class="page-card" data-title="page 1 - Groupes">
+            <img src="images/page-01.jpg" alt="Page 1" ondblclick="openFullscreen(this)">
+            <p>Page 1 - Groupes</p>
+        </div>
+        <div class="page-card" data-title="page 2 - Coupes du monde">
+            <img src="images/page-02.jpg" alt="Page 2 - Coupes du monde" ondblclick="openFullscreen(this)">
+            <p>Page 2 - Coupes du monde</p>
+        </div>
+        <div class="page-card" data-title="page 3 - Mexique">
+            <img src="images/page-03.jpg" alt="Page 3" ondblclick="openFullscreen(this)">
+            <p>Page 3 - Mexique</p>
+        </div>
+        <div class="page-card" data-title="page 4 - Afrique du sud">
+            <img src="images/page-04.jpg" alt="Page 4" ondblclick="openFullscreen(this)">
+            <p>Page 4 - Afrique du sud</p>
+        </div>
+        <div class="page-card" data-title="page 5 - République de corée">
+            <img src="images/page-05.jpg" alt="Page 5" ondblclick="openFullscreen(this)">
+            <p>Page 5 - République de corée</p>
+        </div>
+        <div class="page-card" data-title="page 6 - République Tcheque">
+            <img src="images/page-06.jpg" alt="Page 6" ondblclick="openFullscreen(this)">
+            <p>Page 6 - République Tcheque</p>
+        </div>
+        <div class="page-card" data-title="page 7 - Canada">
+            <img src="images/page-07.jpg" alt="Page 7" ondblclick="openFullscreen(this)">
+            <p>Page 7 - Canada</p>
+        </div>
+        <div class="page-card" data-title="page 8 - Bosnie">
+            <img src="images/page-08.jpg" alt="Page 8" ondblclick="openFullscreen(this)">
+            <p>Page 8 - Bosnie</p>
+        </div>
+        <div class="page-card" data-title="page 9 - Qatar">
+            <img src="images/page-09.jpg" alt="Page 9" ondblclick="openFullscreen(this)">
+            <p>Page 9 - Qatar</p>
+        </div>
+        <div class="page-card" data-title="page 10 - Suisse">
+            <img src="images/page-10.jpg" alt="Page 10" ondblclick="openFullscreen(this)">
+            <p>Page 10 - Suisse</p>
+        </div>
+        <div class="page-card" data-title="page 11 - Brésil">
+            <img src="images/page-11.jpg" alt="Page 11" ondblclick="openFullscreen(this)">
+            <p>Page 11 - Brésil</p>
+        </div>
+        <div class="page-card" data-title="page 12 - Maroc">
+            <img src="images/page-12.jpg" alt="Page 12" ondblclick="openFullscreen(this)">
+            <p>Page 12 - Maroc</p>
+        </div>
+        <div class="page-card" data-title="page 13 - Haïti">
+            <img src="images/page-13.jpg" alt="Page 13" ondblclick="openFullscreen(this)">
+            <p>Page 13 - Haïti</p>
+        </div>
+        <div class="page-card" data-title="page 14 - Ecosse">
+            <img src="images/page-14.jpg" alt="Page 14" ondblclick="openFullscreen(this)">
+            <p>Page 14 - Ecosse</p>
+        </div>
+        <div class="page-card" data-title="page 15 - USA">
+            <img src="images/page-15.jpg" alt="Page 15" ondblclick="openFullscreen(this)">
+            <p>Page 15 - USA</p>
+        </div>
+        <div class="page-card" data-title="page 16 - Paraguay">
+            <img src="images/page-16.jpg" alt="Page 16" ondblclick="openFullscreen(this)">
+            <p>Page 16 - Paraguay</p>
+        </div>
+        <div class="page-card" data-title="page 17 - Australie">
+            <img src="images/page-17.jpg" alt="Page 17" ondblclick="openFullscreen(this)">
+            <p>Page 17 - Australie</p>
+        </div>
+        <div class="page-card" data-title="page 18 - Turquie">
+            <img src="images/page-18.jpg" alt="Page 18" ondblclick="openFullscreen(this)">
+            <p>Page 18 - Turquie</p>
+        </div>
+        <div class="page-card" data-title="page 19 - Allemagne">
+            <img src="images/page-19.jpg" alt="Page 19" ondblclick="openFullscreen(this)">
+            <p>Page 19 - Allemagne</p>
+        </div>
+        <div class="page-card" data-title="page 20 - Curaçao">
+            <img src="images/page-20.jpg" alt="Page 20" ondblclick="openFullscreen(this)">
+            <p>Page 20 - Curaçao</p>
+        </div>
+        <div class="page-card" data-title="page 21 - Côte d'ivoire">
+            <img src="images/page-21.jpg" alt="Page 21" ondblclick="openFullscreen(this)">
+            <p>Page 21 - Côte d'ivoire</p>
+        </div>
+        <div class="page-card" data-title="page 22 - Equateur">
+            <img src="images/page-22.jpg" alt="Page 22" ondblclick="openFullscreen(this)">
+            <p>Page 22 - Equateur</p>
+        </div>
+        <div class="page-card" data-title="page 23 - Pays Bas">
+            <img src="images/page-23.jpg" alt="Page 23" ondblclick="openFullscreen(this)">
+            <p>Page 23 - Pays Bas</p>
+        </div>
+        <div class="page-card" data-title="page 24 - Japon">
+            <img src="images/page-24.jpg" alt="Page 24" ondblclick="openFullscreen(this)">
+            <p>Page 24 - Japon</p>
+        </div>
+        <div class="page-card" data-title="page 25 - Suede">
+            <img src="images/page-25.jpg" alt="Page 25" ondblclick="openFullscreen(this)">
+            <p>Page 25 - Suede</p>
+        </div>
+        <div class="page-card" data-title="page 26 - Tunisie">
+            <img src="images/page-26.jpg" alt="Page 26" ondblclick="openFullscreen(this)">
+            <p>Page 26 - Tunisie</p>
+        </div>
+        <div class="page-card" data-title="page 27 - Belgique">
+            <img src="images/page-27.jpg" alt="Page 27" ondblclick="openFullscreen(this)">
+            <p>Page 27 - Belgique</p>
+        </div>
+        <div class="page-card" data-title="page 28 - Egypte">
+            <img src="images/page-28.jpg" alt="Page 28" ondblclick="openFullscreen(this)">
+            <p>Page 28 - Egypte</p>
+        </div>
+        <div class="page-card" data-title="page 29 - République d'Iran">
+            <img src="images/page-29.jpg" alt="Page 29" ondblclick="openFullscreen(this)">
+            <p>Page 29 - République d'Iran</p>
+        </div>
+        <div class="page-card" data-title="page 30 - Nouvelle Zelande">
+            <img src="images/page-30.jpg" alt="Page 30" ondblclick="openFullscreen(this)">
+            <p>Page 30 - Nouvelle Zelande</p>
+        </div>
+        <div class="page-card" data-title="page 31 - Espagne">
+            <img src="images/page-31.jpg" alt="Page 31" ondblclick="openFullscreen(this)">
+            <p>Page 31 - Espagne</p>
+        </div>
+        <div class="page-card" data-title="page 32 - Cap vert">
+            <img src="images/page-32.jpg" alt="Page 32" ondblclick="openFullscreen(this)">
+            <p>Page 32 - Cap vert</p>
+        </div>
+        <div class="page-card" data-title="page 33 - Arabie Saoudite">
+            <img src="images/page-33.jpg" alt="Page 33" ondblclick="openFullscreen(this)">
+            <p>Page 33 - Arabie Saoudite</p>
+        </div>
+        <div class="page-card" data-title="page 34 - Uruguay">
+            <img src="images/page-34.jpg" alt="Page 34" ondblclick="openFullscreen(this)">
+            <p>Page 34 - Uruguay</p>
+        </div>
+        <div class="page-card" data-title="page 35 - France">
+            <img src="images/page-35.jpg" alt="Page 35" ondblclick="openFullscreen(this)">
+            <p>Page 35 - France</p>
+        </div>
+        <div class="page-card" data-title="page 36 - Sénégal">
+            <img src="images/page-36.jpg" alt="Page 36" ondblclick="openFullscreen(this)">
+            <p>Page 36 - Sénégal</p>
+        </div>
+        <div class="page-card" data-title="page 37 - Iraq">
+            <img src="images/page-37.jpg" alt="Page 37" ondblclick="openFullscreen(this)">
+            <p>Page 37 - Iraq</p>
+        </div>
+        <div class="page-card" data-title="page 38 - Norvege">
+            <img src="images/page-38.jpg" alt="Page 38" ondblclick="openFullscreen(this)">
+            <p>Page 38 - Norvege</p>
+        </div>
+        <div class="page-card" data-title="page 39 - Argentine">
+            <img src="images/page-39.jpg" alt="Page 39" ondblclick="openFullscreen(this)">
+            <p>Page 39 - Argentine</p>
+        </div>
+        <div class="page-card" data-title="page 40 - Algérie">
+            <img src="images/page-40.jpg" alt="Page 40" ondblclick="openFullscreen(this)">
+            <p>Page 40 - Algérie</p>
+        </div>
+        <div class="page-card" data-title="page 41 - Autriche">
+            <img src="images/page-41.jpg" alt="Page 41" ondblclick="openFullscreen(this)">
+            <p>Page 41 - Autriche</p>
+        </div>
+        <div class="page-card" data-title="page 42 - Jordanie">
+            <img src="images/page-42.jpg" alt="Page 42" ondblclick="openFullscreen(this)">
+            <p>Page 42 - Jordanie</p>
+        </div>
+        <div class="page-card" data-title="page 43 - Portugal">
+            <img src="images/page-43.jpg" alt="Page 43" ondblclick="openFullscreen(this)">
+            <p>Page 43 - Portugal</p>
+        </div>
+        <div class="page-card" data-title="page 44 - République Democratique du Congo">
+            <img src="images/page-44.jpg" alt="Page 44" ondblclick="openFullscreen(this)">
+            <p>Page 44 - République Democratique du Congo</p>
+        </div>
+        <div class="page-card" data-title="page 45 - Uzbekistan">
+            <img src="images/page-45.jpg" alt="Page 45" ondblclick="openFullscreen(this)">
+            <p>Page 45 - Uzbekistan</p>
+        </div>
+        <div class="page-card" data-title="page 46 - Colombie">
+            <img src="images/page-46.jpg" alt="Page 46" ondblclick="openFullscreen(this)">
+            <p>Page 46 - Colombie</p>
+        </div>
+        <div class="page-card" data-title="page 47 - Angleterre">
+            <img src="images/page-47.jpg" alt="Page 47" ondblclick="openFullscreen(this)">
+            <p>Page 47 - Angleterre</p>
+        </div>
+        <div class="page-card" data-title="page 48 - Croatie">
+            <img src="images/page-48.jpg" alt="Page 48" ondblclick="openFullscreen(this)">
+            <p>Page 48 - Croatie</p>
+        </div>
+        <div class="page-card" data-title="page 49 - Guinée">
+            <img src="images/page-49.jpg" alt="Page 49" ondblclick="openFullscreen(this)">
+            <p>Page 49 - Guinée</p>
+        </div>
+        <div class="page-card" data-title="page 50 - Panama">
+            <img src="images/page-50.jpg" alt="Page 50" ondblclick="openFullscreen(this)">
+            <p>Page 50 - Panama</p>
+        </div>
+        <div class="page-card" data-title="page 51 - equipe de rêve">
+            <img src="images/page-51.jpg" alt="Page 51" ondblclick="openFullscreen(this)">
+            <p>Page 51 - Equipe de rêve</p>
+        </div>
+        <div class="page-card" data-title="page 52 - Coca-Cola">
+            <img src="images/page-52.jpg" alt="Page 52" ondblclick="openFullscreen(this)">
+            <p>Page 52 - Coca-Cola</p>
+        </div>
+        <div class="page-card" data-title="page 53 - Villes organisatrices">
+            <img src="images/page-53.jpg" alt="Page 53" ondblclick="openFullscreen(this)">
+            <p>Page 53 - Villes organisatrices</p>
+        </div>
+        <div class="page-card" data-title="page 54 - Villes organisatrices (suite)">
+            <img src="images/page-54.jpg" alt="Page 54" ondblclick="openFullscreen(this)">
+            <p>Page 54 - Villes organisatrices (suite)</p>
+        </div>
+        <div class="page-card" data-title="page 55 - Update edition Groupe A">
+            <img src="images/page-55.jpg" alt="Page 55" ondblclick="openFullscreen(this)">
+            <p>Page 55 - Update edition Groupe A</p>
+        </div>
+        <div class="page-card" data-title="page 56 - Update edition Groupe B">
+            <img src="images/page-56.jpg" alt="Page 56" ondblclick="openFullscreen(this)">
+            <p>Page 56 - Update edition Groupe B</p>
+        </div>
+        <div class="page-card" data-title="page 57 - Update edition Groupe C">
+            <img src="images/page-57.jpg" alt="Page 57" ondblclick="openFullscreen(this)">
+            <p>Page 57 - Update edition Groupe C</p>
+        </div>
+        <div class="page-card" data-title="page 58 - Update edition Groupe D">
+            <img src="images/page-58.jpg" alt="Page 58" ondblclick="openFullscreen(this)">
+            <p>Page 58 - Update edition Groupe D</p>
+        </div>
+        <div class="page-card" data-title="page 59 - Update edition Groupe E">
+            <img src="images/page-59.jpg" alt="Page 59" ondblclick="openFullscreen(this)">
+            <p>Page 59 - Update edition Groupe E</p>
+        </div>
+        <div class="page-card" data-title="page 60 - Update edition Groupe F">
+            <img src="images/page-60.jpg" alt="Page 60" ondblclick="openFullscreen(this)">
+            <p>Page 60 - Update edition Groupe F</p>
+        </div>
+        <div class="page-card" data-title="page 61 - Update edition Groupe G">
+            <img src="images/page-61.jpg" alt="Page 61" ondblclick="openFullscreen(this)">
+            <p>Page 61 - Update edition Groupe G</p>
+        </div>
+        <div class="page-card" data-title="page 62 - Update edition Groupe H">
+            <img src="images/page-62.jpg" alt="Page 62" ondblclick="openFullscreen(this)">
+            <p>Page 62 - Update edition Groupe H</p>
+        </div>
+        <div class="page-card" data-title="page 63 - Update edition Groupe I">
+            <img src="images/page-63.jpg" alt="Page 63" ondblclick="openFullscreen(this)">
+            <p>Page 63 - Update edition Groupe I</p>
+        </div>
+        <div class="page-card" data-title="page 64 - Update edition Groupe J">
+            <img src="images/page-64.jpg" alt="Page 64" ondblclick="openFullscreen(this)">
+            <p>Page 64 - Update edition Groupe J</p>
+        </div>
+        <div class="page-card" data-title="page 65 - Update edition Groupe K">
+            <img src="images/page-65.jpg" alt="Page 65" ondblclick="openFullscreen(this)">
+            <p>Page 65 - Update edition Groupe K</p>
+        </div>
+        <div class="page-card" data-title="page 66 - Update edition Groupe L">
+            <img src="images/page-66.jpg" alt="Page 66" ondblclick="openFullscreen(this)">
+            <p>Page 66 - Update edition Groupe L</p>
+        </div>
+        <div class="page-card" data-title="page 67 - Fan sticker album">
+            <img src="images/page-67.jpg" alt="Page 67" ondblclick="openFullscreen(this)">
+            <p>Page 67 - Fan sticker album</p>
+        </div>
+        <div class="page-card" data-title="page 68 - Fan sticker album 1">
+            <img src="images/page-68.jpg" alt="Page 68" ondblclick="openFullscreen(this)">
+            <p>Page 68 - Fan sticker album 1</p>
+        </div>
+        <div class="page-card" data-title="page 69 - Fan sticker album 2">
+            <img src="images/page-69.jpg" alt="Page 69" ondblclick="openFullscreen(this)">
+            <p>Page 69 - Fan sticker album 2</p>
+        </div>
+        <div class="page-card" data-title="page 70 - Fan sticker album 3">
+            <img src="images/page-70.jpg" alt="Page 70" ondblclick="openFullscreen(this)">
+            <p>Page 70 - Fan sticker album 3</p>
+        </div>
+        <div class="page-card" data-title="page 71 - Fan sticker album Mc Do">
+            <img src="images/page-71.jpg" alt="Page 71" ondblclick="openFullscreen(this)">
+            <p>Page 71 - Fan sticker album Mc Do</p>
+        </div>
+        <div class="page-card" data-title="page 72 - Tes succès">
+            <img src="images/page-72.jpg" alt="Page 72" ondblclick="openFullscreen(this)">
+            <p>Page 72 - Tes succès</p>
+        </div>
+        <div class="page-card" data-title="page 73 - Fan sticker album Coca-cola 1">
+            <img src="images/page-73.jpg" alt="Page 73" ondblclick="openFullscreen(this)">
+            <p>Page 73 - Fan sticker album Coca-cola 1</p>
+        </div>
+        <div class="page-card" data-title="page 74 - Fan sticker album Coca-cola 2">
+            <img src="images/page-74.jpg" alt="Page 74" ondblclick="openFullscreen(this)">
+            <p>Page 74 - Fan sticker album Coca-cola 2</p>
+        </div>
+        <!-- Ajout de la page 75 -->
+        <div class="page-card" data-title="page 75 - Affiches officielles des coupes du monde">
+            <img src="images/page-75.jpg" alt="Page 75" ondblclick="openFullscreen(this)">
+            <p>Page 75 - Affiches officielles des coupes du monde</p>
+        </div>
+        <!-- Ajout de la page 76 -->
+        <div class="page-card" data-title="page 76 - Mascottes officielles des coupes du monde">
+            <img src="images/page-76.jpg" alt="Page 76" ondblclick="openFullscreen(this)">
+            <p>Page 76 - Mascottes officielles des coupes du monde</p>
+        </div>
+    </div>
+
+    <!-- Overlay plein écran avec gestion du zoom et du glisser-déposer -->
+    <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen(event)">
+        <img id="fullscreenImg" src="" alt="Agrandissement" onclick="toggleZoom(event)">
+    </div>
+
+    <script>
+        let isZoomed = false;
+        let posX = 0;
+        let posY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        function normalizeText(text) {
+            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function filterPages() {
+            let input = normalizeText(document.getElementById('searchInput').value);
+            let cards = document.getElementsByClassName('page-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let title = normalizeText(cards[i].getAttribute('data-title'));
+                if (title.includes(input)) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            filterPages();
+        }
+
+        function openFullscreen(imgElement) {
+            let overlay = document.getElementById('fullscreenOverlay');
+            let fullscreenImg = document.getElementById('fullscreenImg');
+            fullscreenImg.src = imgElement.src;
+            isZoomed = false;
+            posX = 0;
+            posY = 0;
+            updateImageTransform();
+            overlay.style.display = 'flex';
+        }
+
+        function toggleZoom(event) {
+            event.stopPropagation();
+            let fullscreenImg = document.getElementById('fullscreenImg');
+            if (!isZoomed) {
+                isZoomed = true;
+                posX = 0;
+                posY = 0;
+            } else {
+                isZoomed = false;
+                posX = 0;
+                posY = 0;
+            }
+            updateImageTransform();
+        }
+
+        function updateImageTransform() {
+            let fullscreenImg = document.getElementById('fullscreenImg');
+            let scale = isZoomed ? 1.8 : 1;
+            fullscreenImg.style.transform = `scale(${scale}) translate(${posX}px, ${posY}px)`;
+        }
+
+        function closeFullscreen(event) {
+            if (event && event.target.id === 'fullscreenImg') return;
+            let overlay = document.getElementById('fullscreenOverlay');
+            overlay.style.display = 'none';
+        }
+
+        let fullscreenImg = document.getElementById('fullscreenImg');
+
+        fullscreenImg.addEventListener('mousedown', function(event) {
+            if (!isZoomed) return;
+            isDragging = true;
+            startX = event.clientX - posX;
+            startY = event.clientY - posY;
+            fullscreenImg.style.cursor = 'grabbing';
+            event.preventDefault();
+        });
+
+        document.addEventListener('mousemove', function(event) {
+            if (!isDragging || !isZoomed) return;
+            posX = event.clientX - startX;
+            posY = event.clientY - startY;
+            updateImageTransform();
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isZoomed) {
+                fullscreenImg.style.cursor = 'grab';
+            }
+            isDragging = false;
+        });
+
+        document.addEventListener('keydown', function(event) {
+            let overlay = document.getElementById('fullscreenOverlay');
+            if (overlay.style.display === 'flex' && isZoomed) {
+                let step = 50; 
+                if (event.key === 'ArrowUp') {
+                    posY += step;
+                    event.preventDefault();
+                } else if (event.key === 'ArrowDown') {
+                    posY -= step;
+                    event.preventDefault();
+                } else if (event.key === 'ArrowLeft') {
+                    posX += step;
+                    event.preventDefault();
+                } else if (event.key === 'ArrowRight') {
+                    posX -= step;
+                    event.preventDefault();
+                } else if (event.key === 'Escape') {
+                    document.getElementById('fullscreenOverlay').style.display = 'none';
+                }
+                updateImageTransform();
+            }
+        });
+    </script>
+</body>
+</html>
