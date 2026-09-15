@@ -9,14 +9,25 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             text-align: center;
+        }
+        /* En-tête fixe en haut de la page */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #f4f4f9;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);
+            z-index: 100;
         }
         h1 {
             color: #032b43;
+            margin: 0 0 10px 0;
+            font-size: 24px;
         }
         .search-container {
-            margin: 20px 0;
+            margin: 10px 0;
         }
         input[type="text"] {
             padding: 10px;
@@ -38,12 +49,29 @@
         button:hover {
             background-color: #0056b3;
         }
+        
+        /* Navigation pagination */
+        .pagination-controls {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #032b43;
+        }
+        .pagination-controls button {
+            background-color: #28a745;
+        }
+        .pagination-controls button:hover {
+            background-color: #218838;
+        }
+
+        /* Grille des images */
         .album-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
+            padding: 20px;
         }
         .page-card {
             background: white;
@@ -51,12 +79,27 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             width: 300px;
+            border: 3px solid transparent; /* Bordure transparente par défaut */
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
+
+        /* Style lorsque la souris survole la carte (effet visuel sans bloquer le clavier) */
+        .page-card:hover {
+            border: 3px solid #007bff;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Style spécifique pour la carte active (sélectionnée au clavier) */
+        .page-card.active-card {
+            border: 3px solid #007bff;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+        }
+
         .page-card img {
             width: 100%;
             height: auto;
             border-radius: 4px;
-            cursor: pointer;
             transition: transform 0.2s;
         }
         .page-card img:hover {
@@ -98,317 +141,325 @@
 </head>
 <body>
 
-    <h1>Mon Album Panini - Coupe du Monde de Football 2026</h1>
-    
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Rechercher une équipe..." onkeyup="filterPages()">
-        <button onclick="resetSearch()">Réinitialiser</button>
+    <!-- En-tête fixe -->
+    <div class="sticky-header">
+        <h1>Mon Album Panini - Coupe du Monde de Football 2026</h1>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Rechercher une équipe..." onkeyup="filterPages()">
+            <button onclick="resetSearch()">Réinitialiser</button>
+        </div>
+
+        <div class="pagination-controls" id="paginationControls">
+            <button onclick="changePage(-1)">← Précédent</button>
+            <span id="pageIndicator" style="margin: 0 15px;">Page 1 / 76</span>
+            <button onclick="changePage(1)">Suivant →</button>
+        </div>
     </div>
 
+    <!-- Grille des images -->
     <div class="album-grid" id="albumGrid">
-        <div class="page-card" data-title="page 1 - Groupes">
+        <div class="page-card" id="card-0" data-title="page 1 - Groupes" onclick="selectCard(0)">
             <img src="images/page-01.jpg" alt="Page 1" ondblclick="openFullscreen(this)">
             <p>Page 1 - Groupes</p>
         </div>
-        <div class="page-card" data-title="page 2 - Coupes du monde">
+        <div class="page-card" id="card-1" data-title="page 2 - Coupes du monde" onclick="selectCard(1)">
             <img src="images/page-02.jpg" alt="Page 2 - Coupes du monde" ondblclick="openFullscreen(this)">
             <p>Page 2 - Coupes du monde</p>
         </div>
-        <div class="page-card" data-title="page 3 - Mexique">
+        <div class="page-card" id="card-2" data-title="page 3 - Mexique" onclick="selectCard(2)">
             <img src="images/page-03.jpg" alt="Page 3" ondblclick="openFullscreen(this)">
             <p>Page 3 - Mexique</p>
         </div>
-        <div class="page-card" data-title="page 4 - Afrique du sud">
+        <div class="page-card" id="card-3" data-title="page 4 - Afrique du sud" onclick="selectCard(3)">
             <img src="images/page-04.jpg" alt="Page 4" ondblclick="openFullscreen(this)">
             <p>Page 4 - Afrique du sud</p>
         </div>
-        <div class="page-card" data-title="page 5 - République de corée">
+        <div class="page-card" id="card-4" data-title="page 5 - République de corée" onclick="selectCard(4)">
             <img src="images/page-05.jpg" alt="Page 5" ondblclick="openFullscreen(this)">
             <p>Page 5 - République de corée</p>
         </div>
-        <div class="page-card" data-title="page 6 - République Tcheque">
+        <div class="page-card" id="card-5" data-title="page 6 - République Tcheque" onclick="selectCard(5)">
             <img src="images/page-06.jpg" alt="Page 6" ondblclick="openFullscreen(this)">
             <p>Page 6 - République Tcheque</p>
         </div>
-        <div class="page-card" data-title="page 7 - Canada">
+        <div class="page-card" id="card-6" data-title="page 7 - Canada" onclick="selectCard(6)">
             <img src="images/page-07.jpg" alt="Page 7" ondblclick="openFullscreen(this)">
             <p>Page 7 - Canada</p>
         </div>
-        <div class="page-card" data-title="page 8 - Bosnie">
+        <div class="page-card" id="card-7" data-title="page 8 - Bosnie" onclick="selectCard(7)">
             <img src="images/page-08.jpg" alt="Page 8" ondblclick="openFullscreen(this)">
             <p>Page 8 - Bosnie</p>
         </div>
-        <div class="page-card" data-title="page 9 - Qatar">
+        <div class="page-card" id="card-8" data-title="page 9 - Qatar" onclick="selectCard(8)">
             <img src="images/page-09.jpg" alt="Page 9" ondblclick="openFullscreen(this)">
             <p>Page 9 - Qatar</p>
         </div>
-        <div class="page-card" data-title="page 10 - Suisse">
+        <div class="page-card" id="card-9" data-title="page 10 - Suisse" onclick="selectCard(9)">
             <img src="images/page-10.jpg" alt="Page 10" ondblclick="openFullscreen(this)">
             <p>Page 10 - Suisse</p>
         </div>
-        <div class="page-card" data-title="page 11 - Brésil">
+        <div class="page-card" id="card-10" data-title="page 11 - Brésil" onclick="selectCard(10)">
             <img src="images/page-11.jpg" alt="Page 11" ondblclick="openFullscreen(this)">
             <p>Page 11 - Brésil</p>
         </div>
-        <div class="page-card" data-title="page 12 - Maroc">
+        <div class="page-card" id="card-11" data-title="page 12 - Maroc" onclick="selectCard(11)">
             <img src="images/page-12.jpg" alt="Page 12" ondblclick="openFullscreen(this)">
             <p>Page 12 - Maroc</p>
         </div>
-        <div class="page-card" data-title="page 13 - Haïti">
+        <div class="page-card" id="card-12" data-title="page 13 - Haïti" onclick="selectCard(12)">
             <img src="images/page-13.jpg" alt="Page 13" ondblclick="openFullscreen(this)">
             <p>Page 13 - Haïti</p>
         </div>
-        <div class="page-card" data-title="page 14 - Ecosse">
+        <div class="page-card" id="card-13" data-title="page 14 - Ecosse" onclick="selectCard(13)">
             <img src="images/page-14.jpg" alt="Page 14" ondblclick="openFullscreen(this)">
             <p>Page 14 - Ecosse</p>
         </div>
-        <div class="page-card" data-title="page 15 - USA">
+        <div class="page-card" id="card-14" data-title="page 15 - USA" onclick="selectCard(14)">
             <img src="images/page-15.jpg" alt="Page 15" ondblclick="openFullscreen(this)">
             <p>Page 15 - USA</p>
         </div>
-        <div class="page-card" data-title="page 16 - Paraguay">
+        <div class="page-card" id="card-15" data-title="page 16 - Paraguay" onclick="selectCard(15)">
             <img src="images/page-16.jpg" alt="Page 16" ondblclick="openFullscreen(this)">
             <p>Page 16 - Paraguay</p>
         </div>
-        <div class="page-card" data-title="page 17 - Australie">
+        <div class="page-card" id="card-16" data-title="page 17 - Australie" onclick="selectCard(16)">
             <img src="images/page-17.jpg" alt="Page 17" ondblclick="openFullscreen(this)">
             <p>Page 17 - Australie</p>
         </div>
-        <div class="page-card" data-title="page 18 - Turquie">
+        <div class="page-card" id="card-17" data-title="page 18 - Turquie" onclick="selectCard(17)">
             <img src="images/page-18.jpg" alt="Page 18" ondblclick="openFullscreen(this)">
             <p>Page 18 - Turquie</p>
         </div>
-        <div class="page-card" data-title="page 19 - Allemagne">
+        <div class="page-card" id="card-18" data-title="page 19 - Allemagne" onclick="selectCard(18)">
             <img src="images/page-19.jpg" alt="Page 19" ondblclick="openFullscreen(this)">
             <p>Page 19 - Allemagne</p>
         </div>
-        <div class="page-card" data-title="page 20 - Curaçao">
+        <div class="page-card" id="card-19" data-title="page 20 - Curaçao" onclick="selectCard(19)">
             <img src="images/page-20.jpg" alt="Page 20" ondblclick="openFullscreen(this)">
             <p>Page 20 - Curaçao</p>
         </div>
-        <div class="page-card" data-title="page 21 - Côte d'ivoire">
+        <div class="page-card" id="card-20" data-title="page 21 - Côte d'ivoire" onclick="selectCard(20)">
             <img src="images/page-21.jpg" alt="Page 21" ondblclick="openFullscreen(this)">
             <p>Page 21 - Côte d'ivoire</p>
         </div>
-        <div class="page-card" data-title="page 22 - Equateur">
+        <div class="page-card" id="card-21" data-title="page 22 - Equateur" onclick="selectCard(21)">
             <img src="images/page-22.jpg" alt="Page 22" ondblclick="openFullscreen(this)">
             <p>Page 22 - Equateur</p>
         </div>
-        <div class="page-card" data-title="page 23 - Pays Bas">
+        <div class="page-card" id="card-22" data-title="page 23 - Pays Bas" onclick="selectCard(22)">
             <img src="images/page-23.jpg" alt="Page 23" ondblclick="openFullscreen(this)">
             <p>Page 23 - Pays Bas</p>
         </div>
-        <div class="page-card" data-title="page 24 - Japon">
+        <div class="page-card" id="card-23" data-title="page 24 - Japon" onclick="selectCard(23)">
             <img src="images/page-24.jpg" alt="Page 24" ondblclick="openFullscreen(this)">
             <p>Page 24 - Japon</p>
         </div>
-        <div class="page-card" data-title="page 25 - Suede">
+        <div class="page-card" id="card-24" data-title="page 25 - Suede" onclick="selectCard(24)">
             <img src="images/page-25.jpg" alt="Page 25" ondblclick="openFullscreen(this)">
             <p>Page 25 - Suede</p>
         </div>
-        <div class="page-card" data-title="page 26 - Tunisie">
+        <div class="page-card" id="card-25" data-title="page 26 - Tunisie" onclick="selectCard(25)">
             <img src="images/page-26.jpg" alt="Page 26" ondblclick="openFullscreen(this)">
             <p>Page 26 - Tunisie</p>
         </div>
-        <div class="page-card" data-title="page 27 - Belgique">
+        <div class="page-card" id="card-26" data-title="page 27 - Belgique" onclick="selectCard(26)">
             <img src="images/page-27.jpg" alt="Page 27" ondblclick="openFullscreen(this)">
             <p>Page 27 - Belgique</p>
         </div>
-        <div class="page-card" data-title="page 28 - Egypte">
+        <div class="page-card" id="card-27" data-title="page 28 - Egypte" onclick="selectCard(27)">
             <img src="images/page-28.jpg" alt="Page 28" ondblclick="openFullscreen(this)">
             <p>Page 28 - Egypte</p>
         </div>
-        <div class="page-card" data-title="page 29 - République d'Iran">
+        <div class="page-card" id="card-28" data-title="page 29 - République d'Iran" onclick="selectCard(28)">
             <img src="images/page-29.jpg" alt="Page 29" ondblclick="openFullscreen(this)">
             <p>Page 29 - République d'Iran</p>
         </div>
-        <div class="page-card" data-title="page 30 - Nouvelle Zelande">
+        <div class="page-card" id="card-29" data-title="page 30 - Nouvelle Zelande" onclick="selectCard(29)">
             <img src="images/page-30.jpg" alt="Page 30" ondblclick="openFullscreen(this)">
             <p>Page 30 - Nouvelle Zelande</p>
         </div>
-        <div class="page-card" data-title="page 31 - Espagne">
+        <div class="page-card" id="card-30" data-title="page 31 - Espagne" onclick="selectCard(30)">
             <img src="images/page-31.jpg" alt="Page 31" ondblclick="openFullscreen(this)">
             <p>Page 31 - Espagne</p>
         </div>
-        <div class="page-card" data-title="page 32 - Cap vert">
+        <div class="page-card" id="card-31" data-title="page 32 - Cap vert" onclick="selectCard(31)">
             <img src="images/page-32.jpg" alt="Page 32" ondblclick="openFullscreen(this)">
             <p>Page 32 - Cap vert</p>
         </div>
-        <div class="page-card" data-title="page 33 - Arabie Saoudite">
+        <div class="page-card" id="card-32" data-title="page 33 - Arabie Saoudite" onclick="selectCard(32)">
             <img src="images/page-33.jpg" alt="Page 33" ondblclick="openFullscreen(this)">
             <p>Page 33 - Arabie Saoudite</p>
         </div>
-        <div class="page-card" data-title="page 34 - Uruguay">
+        <div class="page-card" id="card-33" data-title="page 34 - Uruguay" onclick="selectCard(33)">
             <img src="images/page-34.jpg" alt="Page 34" ondblclick="openFullscreen(this)">
             <p>Page 34 - Uruguay</p>
         </div>
-        <div class="page-card" data-title="page 35 - France">
+        <div class="page-card" id="card-34" data-title="page 35 - France" onclick="selectCard(34)">
             <img src="images/page-35.jpg" alt="Page 35" ondblclick="openFullscreen(this)">
             <p>Page 35 - France</p>
         </div>
-        <div class="page-card" data-title="page 36 - Sénégal">
+        <div class="page-card" id="card-35" data-title="page 36 - Sénégal" onclick="selectCard(35)">
             <img src="images/page-36.jpg" alt="Page 36" ondblclick="openFullscreen(this)">
             <p>Page 36 - Sénégal</p>
         </div>
-        <div class="page-card" data-title="page 37 - Iraq">
+        <div class="page-card" id="card-36" data-title="page 37 - Iraq" onclick="selectCard(36)">
             <img src="images/page-37.jpg" alt="Page 37" ondblclick="openFullscreen(this)">
             <p>Page 37 - Iraq</p>
         </div>
-        <div class="page-card" data-title="page 38 - Norvege">
+        <div class="page-card" id="card-37" data-title="page 38 - Norvege" onclick="selectCard(37)">
             <img src="images/page-38.jpg" alt="Page 38" ondblclick="openFullscreen(this)">
             <p>Page 38 - Norvege</p>
         </div>
-        <div class="page-card" data-title="page 39 - Argentine">
+        <div class="page-card" id="card-38" data-title="page 39 - Argentine" onclick="selectCard(38)">
             <img src="images/page-39.jpg" alt="Page 39" ondblclick="openFullscreen(this)">
             <p>Page 39 - Argentine</p>
         </div>
-        <div class="page-card" data-title="page 40 - Algérie">
+        <div class="page-card" id="card-39" data-title="page 40 - Algérie" onclick="selectCard(39)">
             <img src="images/page-40.jpg" alt="Page 40" ondblclick="openFullscreen(this)">
             <p>Page 40 - Algérie</p>
         </div>
-        <div class="page-card" data-title="page 41 - Autriche">
+        <div class="page-card" id="card-40" data-title="page 41 - Autriche" onclick="selectCard(40)">
             <img src="images/page-41.jpg" alt="Page 41" ondblclick="openFullscreen(this)">
             <p>Page 41 - Autriche</p>
         </div>
-        <div class="page-card" data-title="page 42 - Jordanie">
+        <div class="page-card" id="card-41" data-title="page 42 - Jordanie" onclick="selectCard(41)">
             <img src="images/page-42.jpg" alt="Page 42" ondblclick="openFullscreen(this)">
             <p>Page 42 - Jordanie</p>
         </div>
-        <div class="page-card" data-title="page 43 - Portugal">
+        <div class="page-card" id="card-42" data-title="page 43 - Portugal" onclick="selectCard(42)">
             <img src="images/page-43.jpg" alt="Page 43" ondblclick="openFullscreen(this)">
             <p>Page 43 - Portugal</p>
         </div>
-        <div class="page-card" data-title="page 44 - République Democratique du Congo">
+        <div class="page-card" id="card-43" data-title="page 44 - République Democratique du Congo" onclick="selectCard(43)">
             <img src="images/page-44.jpg" alt="Page 44" ondblclick="openFullscreen(this)">
             <p>Page 44 - République Democratique du Congo</p>
         </div>
-        <div class="page-card" data-title="page 45 - Uzbekistan">
+        <div class="page-card" id="card-44" data-title="page 45 - Uzbekistan" onclick="selectCard(44)">
             <img src="images/page-45.jpg" alt="Page 45" ondblclick="openFullscreen(this)">
             <p>Page 45 - Uzbekistan</p>
         </div>
-        <div class="page-card" data-title="page 46 - Colombie">
+        <div class="page-card" id="card-45" data-title="page 46 - Colombie" onclick="selectCard(45)">
             <img src="images/page-46.jpg" alt="Page 46" ondblclick="openFullscreen(this)">
             <p>Page 46 - Colombie</p>
         </div>
-        <div class="page-card" data-title="page 47 - Angleterre">
+        <div class="page-card" id="card-46" data-title="page 47 - Angleterre" onclick="selectCard(46)">
             <img src="images/page-47.jpg" alt="Page 47" ondblclick="openFullscreen(this)">
             <p>Page 47 - Angleterre</p>
         </div>
-        <div class="page-card" data-title="page 48 - Croatie">
+        <div class="page-card" id="card-47" data-title="page 48 - Croatie" onclick="selectCard(47)">
             <img src="images/page-48.jpg" alt="Page 48" ondblclick="openFullscreen(this)">
             <p>Page 48 - Croatie</p>
         </div>
-        <div class="page-card" data-title="page 49 - Guinée">
+        <div class="page-card" id="card-48" data-title="page 49 - Guinée" onclick="selectCard(48)">
             <img src="images/page-49.jpg" alt="Page 49" ondblclick="openFullscreen(this)">
             <p>Page 49 - Guinée</p>
         </div>
-        <div class="page-card" data-title="page 50 - Panama">
+        <div class="page-card" id="card-49" data-title="page 50 - Panama" onclick="selectCard(49)">
             <img src="images/page-50.jpg" alt="Page 50" ondblclick="openFullscreen(this)">
             <p>Page 50 - Panama</p>
         </div>
-        <div class="page-card" data-title="page 51 - equipe de rêve">
+        <div class="page-card" id="card-50" data-title="page 51 - equipe de rêve" onclick="selectCard(50)">
             <img src="images/page-51.jpg" alt="Page 51" ondblclick="openFullscreen(this)">
             <p>Page 51 - Equipe de rêve</p>
         </div>
-        <div class="page-card" data-title="page 52 - Coca-Cola">
+        <div class="page-card" id="card-51" data-title="page 52 - Coca-Cola" onclick="selectCard(51)">
             <img src="images/page-52.jpg" alt="Page 52" ondblclick="openFullscreen(this)">
             <p>Page 52 - Coca-Cola</p>
         </div>
-        <div class="page-card" data-title="page 53 - Villes organisatrices">
+        <div class="page-card" id="card-52" data-title="page 53 - Villes organisatrices" onclick="selectCard(52)">
             <img src="images/page-53.jpg" alt="Page 53" ondblclick="openFullscreen(this)">
             <p>Page 53 - Villes organisatrices</p>
         </div>
-        <div class="page-card" data-title="page 54 - Villes organisatrices (suite)">
+        <div class="page-card" id="card-53" data-title="page 54 - Villes organisatrices (suite)" onclick="selectCard(53)">
             <img src="images/page-54.jpg" alt="Page 54" ondblclick="openFullscreen(this)">
             <p>Page 54 - Villes organisatrices (suite)</p>
         </div>
-        <div class="page-card" data-title="page 55 - Update edition Groupe A">
+        <div class="page-card" id="card-54" data-title="page 55 - Update edition Groupe A" onclick="selectCard(54)">
             <img src="images/page-55.jpg" alt="Page 55" ondblclick="openFullscreen(this)">
             <p>Page 55 - Update edition Groupe A</p>
         </div>
-        <div class="page-card" data-title="page 56 - Update edition Groupe B">
+        <div class="page-card" id="card-55" data-title="page 56 - Update edition Groupe B" onclick="selectCard(55)">
             <img src="images/page-56.jpg" alt="Page 56" ondblclick="openFullscreen(this)">
             <p>Page 56 - Update edition Groupe B</p>
         </div>
-        <div class="page-card" data-title="page 57 - Update edition Groupe C">
+        <div class="page-card" id="card-56" data-title="page 57 - Update edition Groupe C" onclick="selectCard(56)">
             <img src="images/page-57.jpg" alt="Page 57" ondblclick="openFullscreen(this)">
             <p>Page 57 - Update edition Groupe C</p>
         </div>
-        <div class="page-card" data-title="page 58 - Update edition Groupe D">
+        <div class="page-card" id="card-57" data-title="page 58 - Update edition Groupe D" onclick="selectCard(57)">
             <img src="images/page-58.jpg" alt="Page 58" ondblclick="openFullscreen(this)">
             <p>Page 58 - Update edition Groupe D</p>
         </div>
-        <div class="page-card" data-title="page 59 - Update edition Groupe E">
+        <div class="page-card" id="card-58" data-title="page 59 - Update edition Groupe E" onclick="selectCard(58)">
             <img src="images/page-59.jpg" alt="Page 59" ondblclick="openFullscreen(this)">
             <p>Page 59 - Update edition Groupe E</p>
         </div>
-        <div class="page-card" data-title="page 60 - Update edition Groupe F">
+        <div class="page-card" id="card-59" data-title="page 60 - Update edition Groupe F" onclick="selectCard(59)">
             <img src="images/page-60.jpg" alt="Page 60" ondblclick="openFullscreen(this)">
             <p>Page 60 - Update edition Groupe F</p>
         </div>
-        <div class="page-card" data-title="page 61 - Update edition Groupe G">
+        <div class="page-card" id="card-60" data-title="page 61 - Update edition Groupe G" onclick="selectCard(60)">
             <img src="images/page-61.jpg" alt="Page 61" ondblclick="openFullscreen(this)">
             <p>Page 61 - Update edition Groupe G</p>
         </div>
-        <div class="page-card" data-title="page 62 - Update edition Groupe H">
+        <div class="page-card" id="card-61" data-title="page 62 - Update edition Groupe H" onclick="selectCard(61)">
             <img src="images/page-62.jpg" alt="Page 62" ondblclick="openFullscreen(this)">
             <p>Page 62 - Update edition Groupe H</p>
         </div>
-        <div class="page-card" data-title="page 63 - Update edition Groupe I">
+        <div class="page-card" id="card-62" data-title="page 63 - Update edition Groupe I" onclick="selectCard(62)">
             <img src="images/page-63.jpg" alt="Page 63" ondblclick="openFullscreen(this)">
             <p>Page 63 - Update edition Groupe I</p>
         </div>
-        <div class="page-card" data-title="page 64 - Update edition Groupe J">
+        <div class="page-card" id="card-63" data-title="page 64 - Update edition Groupe J" onclick="selectCard(63)">
             <img src="images/page-64.jpg" alt="Page 64" ondblclick="openFullscreen(this)">
             <p>Page 64 - Update edition Groupe J</p>
         </div>
-        <div class="page-card" data-title="page 65 - Update edition Groupe K">
+        <div class="page-card" id="card-64" data-title="page 65 - Update edition Groupe K" onclick="selectCard(64)">
             <img src="images/page-65.jpg" alt="Page 65" ondblclick="openFullscreen(this)">
             <p>Page 65 - Update edition Groupe K</p>
         </div>
-        <div class="page-card" data-title="page 66 - Update edition Groupe L">
+        <div class="page-card" id="card-65" data-title="page 66 - Update edition Groupe L" onclick="selectCard(65)">
             <img src="images/page-66.jpg" alt="Page 66" ondblclick="openFullscreen(this)">
             <p>Page 66 - Update edition Groupe L</p>
         </div>
-        <div class="page-card" data-title="page 67 - Fan sticker album">
+        <div class="page-card" id="card-66" data-title="page 67 - Fan sticker album" onclick="selectCard(66)">
             <img src="images/page-67.jpg" alt="Page 67" ondblclick="openFullscreen(this)">
             <p>Page 67 - Fan sticker album</p>
         </div>
-        <div class="page-card" data-title="page 68 - Fan sticker album 1">
+        <div class="page-card" id="card-67" data-title="page 68 - Fan sticker album 1" onclick="selectCard(67)">
             <img src="images/page-68.jpg" alt="Page 68" ondblclick="openFullscreen(this)">
             <p>Page 68 - Fan sticker album 1</p>
         </div>
-        <div class="page-card" data-title="page 69 - Fan sticker album 2">
+        <div class="page-card" id="card-68" data-title="page 69 - Fan sticker album 2" onclick="selectCard(68)">
             <img src="images/page-69.jpg" alt="Page 69" ondblclick="openFullscreen(this)">
             <p>Page 69 - Fan sticker album 2</p>
         </div>
-        <div class="page-card" data-title="page 70 - Fan sticker album 3">
+        <div class="page-card" id="card-69" data-title="page 70 - Fan sticker album 3" onclick="selectCard(69)">
             <img src="images/page-70.jpg" alt="Page 70" ondblclick="openFullscreen(this)">
             <p>Page 70 - Fan sticker album 3</p>
         </div>
-        <div class="page-card" data-title="page 71 - Fan sticker album Mc Do">
+        <div class="page-card" id="card-70" data-title="page 71 - Fan sticker album Mc Do" onclick="selectCard(70)">
             <img src="images/page-71.jpg" alt="Page 71" ondblclick="openFullscreen(this)">
             <p>Page 71 - Fan sticker album Mc Do</p>
         </div>
-        <div class="page-card" data-title="page 72 - Tes succès">
+        <div class="page-card" id="card-71" data-title="page 72 - Tes succès" onclick="selectCard(71)">
             <img src="images/page-72.jpg" alt="Page 72" ondblclick="openFullscreen(this)">
             <p>Page 72 - Tes succès</p>
         </div>
-        <div class="page-card" data-title="page 73 - Fan sticker album Coca-cola 1">
+        <div class="page-card" id="card-72" data-title="page 73 - Fan sticker album Coca-cola 1" onclick="selectCard(72)">
             <img src="images/page-73.jpg" alt="Page 73" ondblclick="openFullscreen(this)">
             <p>Page 73 - Fan sticker album Coca-cola 1</p>
         </div>
-        <div class="page-card" data-title="page 74 - Fan sticker album Coca-cola 2">
+        <div class="page-card" id="card-73" data-title="page 74 - Fan sticker album Coca-cola 2" onclick="selectCard(73)">
             <img src="images/page-74.jpg" alt="Page 74" ondblclick="openFullscreen(this)">
             <p>Page 74 - Fan sticker album Coca-cola 2</p>
         </div>
-        <!-- Ajout de la page 75 -->
-        <div class="page-card" data-title="page 75 - Affiches officielles des coupes du monde">
+        <div class="page-card" id="card-74" data-title="page 75 - Affiches officielles des coupes du monde" onclick="selectCard(74)">
             <img src="images/page-75.jpg" alt="Page 75" ondblclick="openFullscreen(this)">
             <p>Page 75 - Affiches officielles des coupes du monde</p>
         </div>
-        <!-- Ajout de la page 76 -->
-        <div class="page-card" data-title="page 76 - Mascottes officielles des coupes du monde">
+        <div class="page-card" id="card-75" data-title="page 76 - Mascottes officielles des coupes du monde" onclick="selectCard(75)">
             <img src="images/page-76.jpg" alt="Page 76" ondblclick="openFullscreen(this)">
             <p>Page 76 - Mascottes officielles des coupes du monde</p>
         </div>
@@ -427,18 +478,105 @@
         let startX = 0;
         let startY = 0;
 
+        let currentPageIndex = 0;
+        const cards = document.getElementsByClassName('page-card');
+        const totalPages = cards.length;
+
+        function updateActiveCardHighlight() {
+            for (let i = 0; i < totalPages; i++) {
+                cards[i].classList.remove('active-card');
+            }
+            let activeCard = document.getElementById('card-' + currentPageIndex);
+            if (activeCard) {
+                activeCard.classList.add('active-card');
+            }
+        }
+
+        function updatePaginationView() {
+            let searchVal = document.getElementById('searchInput').value.trim();
+            if (searchVal !== '') {
+                document.getElementById('paginationControls').style.display = 'none';
+                return;
+            } else {
+                document.getElementById('paginationControls').style.display = 'block';
+            }
+
+            for (let i = 0; i < totalPages; i++) {
+                cards[i].style.display = "";
+            }
+            document.getElementById('pageIndicator').innerText = `Page ${currentPageIndex + 1} / ${totalPages}`;
+            updateActiveCardHighlight();
+        }
+
+        function selectCard(index) {
+            let searchVal = document.getElementById('searchInput').value.trim();
+            if (searchVal !== '') {
+                for (let card of cards) {
+                    card.classList.remove('active-card');
+                }
+                let clickedCard = document.getElementById('card-' + index);
+                if (clickedCard) {
+                    clickedCard.classList.add('active-card');
+                }
+                return;
+            }
+
+            currentPageIndex = index;
+            document.getElementById('pageIndicator').innerText = `Page ${currentPageIndex + 1} / ${totalPages}`;
+            updateActiveCardHighlight();
+        }
+
+        function changePage(direction) {
+            let searchVal = document.getElementById('searchInput').value.trim();
+            if (searchVal !== '') return;
+
+            currentPageIndex += direction;
+            if (currentPageIndex < 0) {
+                currentPageIndex = 0;
+            } else if (currentPageIndex >= totalPages) {
+                currentPageIndex = totalPages - 1;
+            }
+            
+            document.getElementById('pageIndicator').innerText = `Page ${currentPageIndex + 1} / ${totalPages}`;
+            updateActiveCardHighlight();
+
+            let targetCard = document.getElementById('card-' + currentPageIndex);
+            if (targetCard) {
+                let headerOffset = document.querySelector('.sticky-header').offsetHeight;
+                let elementPosition = targetCard.getBoundingClientRect().top;
+                let offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
         function normalizeText(text) {
             return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
 
         function filterPages() {
             let input = normalizeText(document.getElementById('searchInput').value);
-            let cards = document.getElementsByClassName('page-card');
+            
+            if (input === '') {
+                updatePaginationView();
+                return;
+            }
 
+            document.getElementById('paginationControls').style.display = 'none';
+
+            let firstMatchFound = false;
             for (let i = 0; i < cards.length; i++) {
                 let title = normalizeText(cards[i].getAttribute('data-title'));
+                cards[i].classList.remove('active-card');
                 if (title.includes(input)) {
                     cards[i].style.display = "";
+                    if (!firstMatchFound) {
+                        cards[i].classList.add('active-card');
+                        firstMatchFound = true;
+                    }
                 } else {
                     cards[i].style.display = "none";
                 }
@@ -447,7 +585,9 @@
 
         function resetSearch() {
             document.getElementById('searchInput').value = '';
-            filterPages();
+            currentPageIndex = 0;
+            updatePaginationView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openFullscreen(imgElement) {
@@ -462,7 +602,7 @@
         }
 
         function toggleZoom(event) {
-            event.stopPropagation();
+            if (event) event.stopPropagation();
             let fullscreenImg = document.getElementById('fullscreenImg');
             if (!isZoomed) {
                 isZoomed = true;
@@ -486,6 +626,14 @@
             if (event && event.target.id === 'fullscreenImg') return;
             let overlay = document.getElementById('fullscreenOverlay');
             overlay.style.display = 'none';
+        }
+
+        function updateSearchActiveCard(visibleCards, index) {
+            for (let card of cards) {
+                card.classList.remove('active-card');
+            }
+            visibleCards[index].classList.add('active-card');
+            visibleCards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         let fullscreenImg = document.getElementById('fullscreenImg');
@@ -513,28 +661,97 @@
             isDragging = false;
         });
 
+        // Gestion de la navigation depuis le champ de recherche
+        document.getElementById('searchInput').addEventListener('keydown', function(event) {
+            let searchVal = this.value.trim();
+            if (searchVal !== '') {
+                let visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+                if (visibleCards.length > 0) {
+                    let currentIndex = visibleCards.findIndex(card => card.classList.contains('active-card'));
+                    if (currentIndex === -1) currentIndex = 0;
+
+                    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                        currentIndex = (currentIndex + 1) % visibleCards.length;
+                        updateSearchActiveCard(visibleCards, currentIndex);
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                        currentIndex = (currentIndex - 1 + visibleCards.length) % visibleCards.length;
+                        updateSearchActiveCard(visibleCards, currentIndex);
+                        event.preventDefault();
+                    } else if (event.key === 'Enter') {
+                        let activeCard = visibleCards[currentIndex];
+                        if (activeCard) {
+                            let imgElement = activeCard.querySelector('img');
+                            if (imgElement) {
+                                openFullscreen(imgElement);
+                                event.preventDefault();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gestion de la navigation globale (quand le focus n'est pas sur la recherche)
         document.addEventListener('keydown', function(event) {
             let overlay = document.getElementById('fullscreenOverlay');
-            if (overlay.style.display === 'flex' && isZoomed) {
-                let step = 50; 
-                if (event.key === 'ArrowUp') {
-                    posY += step;
+            let isOverlayOpen = overlay.style.display === 'flex';
+
+            if (isOverlayOpen) {
+                if (event.key === 'Enter') {
+                    toggleZoom();
                     event.preventDefault();
-                } else if (event.key === 'ArrowDown') {
-                    posY -= step;
-                    event.preventDefault();
-                } else if (event.key === 'ArrowLeft') {
-                    posX += step;
-                    event.preventDefault();
-                } else if (event.key === 'ArrowRight') {
-                    posX -= step;
-                    event.preventDefault();
-                } else if (event.key === 'Escape') {
+                } else if (isZoomed) {
+                    let step = 50; 
+                    if (event.key === 'ArrowUp') {
+                        posY += step;
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowDown') {
+                        posY -= step;
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowLeft') {
+                        posX += step;
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowRight') {
+                        posX -= step;
+                        event.preventDefault();
+                    }
+                }
+                if (event.key === 'Escape') {
                     document.getElementById('fullscreenOverlay').style.display = 'none';
                 }
                 updateImageTransform();
+            } else {
+                let searchVal = document.getElementById('searchInput').value.trim();
+                if (searchVal === '') {
+                    if (event.key === 'ArrowRight') {
+                        changePage(1);
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowLeft') {
+                        changePage(-1);
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowDown') {
+                        changePage(3);
+                        event.preventDefault();
+                    } else if (event.key === 'ArrowUp') {
+                        changePage(-3);
+                        event.preventDefault();
+                    } else if (event.key === 'Enter') {
+                        let activeCard = document.getElementById('card-' + currentPageIndex);
+                        if (activeCard) {
+                            let imgElement = activeCard.querySelector('img');
+                            if (imgElement) {
+                                openFullscreen(imgElement);
+                                event.preventDefault();
+                            }
+                        }
+                    }
+                }
             }
         });
+
+        // Initialisation de l'affichage au chargement de la page
+        updatePaginationView();
     </script>
 </body>
 </html>
